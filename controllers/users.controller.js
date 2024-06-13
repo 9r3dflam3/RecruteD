@@ -1,11 +1,10 @@
 import { UsersService } from "../services/users.service";
 import { HTTP_STATUS } from "../src/constants/http-status.constant";
 import { MESSAGE } from "../src/constants/message.constant";
-import { generateAccessToken, verifyAccessToken } from "../src/utils/auth.util";
 
 export class UsersController {
   usersService = new UsersService();
-  //내 정보 읽기
+  //사용자 정보 조회
   getMyInfo = async (req, res, next) => {
     try {
       const { userId } = req.user;
