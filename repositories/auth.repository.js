@@ -1,6 +1,6 @@
 export class AuthRepository {
   //내 정보 조회
-  getMyInfo = async (userId) => {
+  getMyInfoById = async (userId) => {
     const user = await prisma.user.findFirst({
       where: { id: +userId },
     });
