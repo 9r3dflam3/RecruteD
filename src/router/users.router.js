@@ -1,19 +1,13 @@
 import express from "express";
 import { prisma } from "../utils/prisma.util.js";
-import dotenv from "dotenv";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import authMiddleware from "../middleware/auth.middleware.js";
 import { UsersController } from "../../controllers/users.controller.js";
 
-dotenv.config();
-
-const router = express.Router();
+const userRouter = express.Router();
 
 const usersController = UsersController;
 
 //회원가입
-router.post("/user/sign-up", usersController.userSignUp);
+userRouter.post("/users/sign-up", usersController.userSignUp);
 
 //액세스토큰 발급(24시간)
 function createAccessToken(userId) {
@@ -23,7 +17,7 @@ function createAccessToken(userId) {
 }
 
 //로그인
-router.post("/user/login", async (req, res, next) => {
+userRouter.post("/users/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -34,8 +28,8 @@ router.post("/user/login", async (req, res, next) => {
         .json({ status: 401, message: "인증 정보가 유효하지 않습니다." });
     }
 
-    const decodePassword = await bcrypt.compare(password, user.password);
-    if (!decodePassword) {
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
       return res
         .status(401)
         .json({ status: 401, message: "인증 정보가 유효하지 않습니다." });
@@ -51,7 +45,7 @@ router.post("/user/login", async (req, res, next) => {
   }
 });
 
-router.get("/user", authMiddleware, async (req, res, next) => {
+userRouter.get("/user", authMiddleware, async (req, res, next) => {
   try {
     const { userId } = req.user;
 
@@ -75,4 +69,4 @@ router.get("/user", authMiddleware, async (req, res, next) => {
   }
 });
 
-export default router;
+export default userRouter;

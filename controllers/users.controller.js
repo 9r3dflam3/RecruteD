@@ -1,19 +1,22 @@
 import { UsersService } from "../services/users.service";
+import { HTTP_STATUS } from "../src/constants/http-status.constant";
+import { MESSAGE } from "../src/constants/message.constant";
+import { generateAccessToken, verifyAccessToken } from "../src/utils/auth.util";
 
 export class UsersController {
   usersService = new UsersService();
-  //회원가입 api
+  //내 정보 읽기
   getMyInfo = async (req, res, next) => {
     try {
-      const { userId } = req.body;
+      const { userId } = req.user;
       const getMyInfo = await this.usersService.getMyInfo(userId);
-      const myInfo = await this.usersService.getMyInfo();
-      return res.status(200).json({ data: myInfo });
+      return res.status(HTTP_STATUS.OK).json({ data: getMyInfo });
     } catch (err) {
       next(err);
     }
   };
 
+  //회원가입
   usersSignUp = async (req, res, next) => {
     try {
       const { email, name, password, passwordConfirm } = req.body;
@@ -25,24 +28,27 @@ export class UsersController {
         passwordConfirm
       );
 
-      return res
-        .status(201)
-
-        .json({ status: 201, message: "회원가입 성공!", usersSignUp: resUser });
-
+      return res.status(HTTP_STATUS.CREATED).json({
+        status: HTTP_STATUS.CREATED,
+        message: MESSAGE.AUTH.SIGN_UP.SUCCEED,
+        data: usersSignUp,
+      });
     } catch (err) {
       next(err);
     }
   };
 
+  //로그인
   usersLogIn = async (req, res, next) => {
     try {
       const { email, password } = req.body;
       const usersLogIn = await this.usersService.userLogIn(email, password);
 
-      return res
-        .status(200)
-        .json({ status: 200, message: "로그인 성공!", accessToken });
+      return res.status(HTTP_STATUS.OK).json({
+        status: HTTP_STATUS.OK,
+        message: MESSAGE.AUTH.SIGN_IN.SUCCEED,
+        data: usersLogIn,
+      });
     } catch (err) {
       next(err);
     }
