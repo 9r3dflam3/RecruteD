@@ -1,7 +1,9 @@
-import { UsersRepository } from "../repositories/users.repository";
+
+import { AuthRepository } from "../repositories/auth.repository";
 
 export class UsersService {
-  usersRepository = new UsersRepository();
+  authRepository = new AuthRepository();
+
 
   getMyInfo = async (userId) => {
     const myInfo = await this.usersRepository.findUser(userId);
