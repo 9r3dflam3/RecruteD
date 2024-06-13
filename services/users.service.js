@@ -1,6 +1,7 @@
 import { AuthRepository } from "../repositories/auth.repository";
 import { HTTP_STATUS } from "../src/constants/http-status.constant";
 import { MESSAGE } from "../src/constants/message.constant";
+import { generateAccessToken, hash } from "../src/utils/auth.util";
 
 export class UsersService {
   authRepository = new AuthRepository();
@@ -24,26 +25,28 @@ export class UsersService {
   };
 
   // 회원가입
-  userSignUp = async (email, name, password, passwordConfirm) => {
+  userSignUp = async (email, name, password) => {
     //중복 확인하여 가입
     const isExistUser = await prisma.user.findFirst({
       where: { email },
     });
     if (isExistUser === true) {
       return {
-        status: HTTP_STATUS.OK,
+        status: HTTP_STATUS.BAD_REQUEST,
         message: MESSAGE.AUTH.COMMON.EMAIL.DUPLICATED,
       };
     }
+    //비밀번호 암호화
+    const hashedPassword = await hash(password);
 
-    const userSignUp = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        name,
-      },
-    });
-    return userSignUp;
+    const userSignUp = await prisma.user.create(email, hashedPassword, name);
+
+    return {
+      userId: userSignUp.id,
+      email: userSignUp.email,
+      name: userSignUp.name,
+      createAt: userSignUp.createAt,
+    };
   };
 
   //로그인

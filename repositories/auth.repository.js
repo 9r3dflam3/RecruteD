@@ -1,3 +1,5 @@
+import { prisma } from "@prisma/client";
+
 export class AuthRepository {
   //내 정보 조회
   getMyInfoById = async (userId) => {
