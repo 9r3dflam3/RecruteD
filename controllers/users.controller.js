@@ -27,7 +27,9 @@ export class UsersController {
 
       return res
         .status(201)
+
         .json({ status: 201, message: "회원가입 성공!", usersSignUp: resUser });
+
     } catch (err) {
       next(err);
     }
