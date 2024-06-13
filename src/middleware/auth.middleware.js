@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import { prisma } from "../utils/prisma.util.js";
 import dotEnv from "dotenv";
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { MESSAGE } from "../constants/message.constant.js";
 
 dotEnv.config();
 
@@ -9,15 +11,17 @@ export default async function (req, res, next) {
     const authorization = req.headers["authorization"];
 
     if (!authorization) {
-      return res.status(401).json({ errorMessage: "인증정보가 없습니다." });
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ errorMessage: MESSAGE.JWT.NO_TOKEN });
     }
 
     const [tokenType, token] = authorization.split(" ");
 
     if (tokenType !== "Bearer") {
       return res
-        .status(401)
-        .json({ errorMessage: "지원하지 않는 인증 방식입니다." });
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ errorMessage: MESSAGE.JWT.NOT_SUPPORTED_TYPE });
     }
 
     const decodeToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
@@ -29,8 +33,8 @@ export default async function (req, res, next) {
 
     if (!user) {
       return res
-        .status(401)
-        .json({ errorMessage: "인증 정보와 일치하는 사용자가 없습니다." });
+        .status(HTTP_STATUS.UNAUTHORIZED)
+        .json({ errorMessage: MESSAGE.AUTH.COMMON.JWT.NO_USER });
     }
 
     req.user = user;
@@ -40,12 +44,12 @@ export default async function (req, res, next) {
     switch (error.name) {
       case "TokenExpiredError":
         return res
-          .status(401)
-          .json({ errorMessage: "인증 정보가 만료되었습니다." });
+          .status(HTTP_STATUS.UNAUTHORIZED)
+          .json({ errorMessage: MESSAGE.AUTH.COMMON.JWT.EXPIRED });
       case "JsonWebTokenError":
         return res
-          .status(401)
-          .json({ errorMessage: "인증 정보가 유효하지 않습니다." });
+          .status(HTTP_STATUS.UNAUTHORIZED)
+          .json({ errorMessage: MESSAGE.AUTH.COMMON.JWT.INVALID });
       default:
         next(error);
     }
