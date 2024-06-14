@@ -1,5 +1,5 @@
-import { ResumeRepository } from "../repositories/resumes.repository";
-import { MESSAGE } from "../constants/message.constant";
+import { ResumeRepository } from "../repositories/resumes.repository.js";
+import { MESSAGE } from "../constants/message.constant.js";
 
 export class ResumeService {
   resumeRepository = new ResumeRepository();
