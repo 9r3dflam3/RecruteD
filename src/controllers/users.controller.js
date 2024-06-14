@@ -1,6 +1,6 @@
-import { UsersService } from "../services/users.service";
-import { HTTP_STATUS } from "../src/constants/http-status.constant";
-import { MESSAGE } from "../src/constants/message.constant";
+import { UsersService } from "../services/users.service.js";
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { MESSAGE } from "../constants/message.constant.js";
 
 export class UsersController {
   usersService = new UsersService();

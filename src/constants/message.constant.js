@@ -48,6 +48,7 @@ export const MESSAGE = {
         MIN_LENGTH: "자기소개는 150자 이상 작성해야 합니다.",
       },
       NOT_FOUND: "이력서가 존재하지 않습니다.",
+      NO_ACCESS_RIGTH: "접근 권한이 없습니다.",
     },
     CREATE: {
       SUCCEED: "이력서 생성 성공!",

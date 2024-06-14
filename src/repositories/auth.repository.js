@@ -1,4 +1,6 @@
-import { prisma } from "@prisma/client";
+import pkg from "@prisma/client";
+
+const prisma = pkg.Prisma;
 
 export class AuthRepository {
   //내 정보 조회

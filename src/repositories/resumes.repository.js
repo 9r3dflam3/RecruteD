@@ -28,6 +28,14 @@ export class ResumeRepository {
     return resumes;
   };
 
+  findResumeById = async (resumeId) => {
+    const resume = await this.prisma.resume.findFirst({
+      where: { id: +resumeId },
+      include: { userId: true },
+    });
+    return resume;
+  };
+
   updateResume = async (resumeId, title, comment) => {
     const updateResume = await this.prisma.resume.update({
       where: { id: +resumeId },

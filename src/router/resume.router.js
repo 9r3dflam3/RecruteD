@@ -36,7 +36,7 @@ resumeRouter.post("/resumes/create", authMiddleware, async (req, res, next) => {
 //이력서 목록 조회 api
 resumeRouter.get("/resumes", authMiddleware, async (req, res, next) => {
   try {
-    const { userId, role } = req.user;
+    const { userId } = req.user;
     const { sort, status } = req.query;
 
     const querySort = sort && sort.toLowerCase() === "asc" ? "asc" : "desc";
