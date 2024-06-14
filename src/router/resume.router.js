@@ -3,7 +3,7 @@ import authMiddleware from "../middleware/auth.middleware.js";
 import { ResumeController } from "../controllers/resumes.controller.js";
 
 const resumeRouter = express.Router();
-const resumeController = ResumeController;
+const resumeController = new ResumeController();
 
 //이력서 생성
 resumeRouter.post(
