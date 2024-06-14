@@ -1,7 +1,7 @@
-import { AuthRepository } from "../repositories/auth.repository";
-import { HTTP_STATUS } from "../src/constants/http-status.constant";
-import { MESSAGE } from "../src/constants/message.constant";
-import { generateAccessToken, hash } from "../src/utils/auth.util";
+import { AuthRepository } from "../repositories/auth.repository.js";
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
+import { MESSAGE } from "../constants/message.constant.js";
+import { generateAccessToken, hash } from "../utils/auth.util.js";
 
 export class UsersService {
   authRepository = new AuthRepository();
